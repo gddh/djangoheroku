@@ -1,0 +1,28 @@
+version: '3.7'
+
+services:
+    web:
+        build: ./djangoheroku
+        command: python /usr/src/djangoheroku/manage.py runserver 0.0.0.0:8000
+        volumes:
+         - ./djangoheroku/:/usr/src/djangoheroku/
+        ports:
+         - 8000:8000
+        environment:
+         - SECRET_KEY=hyf-xr*m-#uwgi_*7^^!*!x8wsnoo#z1#0l(t!%v%)(gn)d22
+         - DEBUG=True
+         - SQL_ENGINE=django.db.backends.postgresql
+         - SQL_DATABASE=postgres
+         - SQL_USER=postgres
+         - SQL_PASSWORD=postgres
+         - SQL_HOST=db
+         - SQL_PORT=5432
+        depends_on:
+         - db
+    db:
+        image: postgres:10.5-alpine
+        volumes:
+         - postgres_data:/var/lib/postgresql/data/
+
+volumes:
+    postgres_data:
